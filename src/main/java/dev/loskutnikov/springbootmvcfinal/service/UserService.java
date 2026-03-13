@@ -3,8 +3,6 @@ package dev.loskutnikov.springbootmvcfinal.service;
 import dev.loskutnikov.springbootmvcfinal.dto.UserDto;
 import dev.loskutnikov.springbootmvcfinal.model.Pet;
 import dev.loskutnikov.springbootmvcfinal.model.User;
-import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -18,11 +16,9 @@ public class UserService {
 
     private final UserMapper userMapper;
 
-    private final PetMapper petMapper;
 
-    public UserService(UserMapper userMapper, PetMapper petMapper) {
+    public UserService(UserMapper userMapper) {
         this.userMapper = userMapper;
-        this.petMapper = petMapper;
         this.idCounter = 0L;
         this.userList = new HashMap<>();
     }
@@ -51,8 +47,15 @@ public class UserService {
         pets.add(pet);
     }
 
+    public void deletePetFromUser(Long userId, Pet pet) {
+        User user = Optional.ofNullable(userList.get(userId))
+                .orElseThrow(() -> new NoSuchElementException("User not found by id=%s".formatted(userId)));
+        user.getPets().remove(pet);
+    }
+
     public UserDto updateUser(UserDto userDto, Long userId) {
-        UserDto updatedUser = userMapper.toDto(userList.get(userId));
+        UserDto updatedUser = Optional.ofNullable(userMapper.toDto(userList.get(userId)))
+                .orElseThrow(() -> new NoSuchElementException("User not found by id=%s".formatted(userId)));
         updatedUser.setName(userDto.getName());
         updatedUser.setEmail(userDto.getEmail());
         updatedUser.setAge(userDto.getAge());
@@ -61,8 +64,15 @@ public class UserService {
     }
 
     public void deleteUser(Long userId) {
-        UserDto deletedUser = userMapper.toDto(userList.get(userId));
-        userList.remove(userId);
+        UserDto deletedUser = findById(userId);
+        userList.remove(deletedUser.getId());
+    }
 
+    public List<User> getAllUsers() {
+        List<User> list = userList.values().stream().toList();
+        if (list.isEmpty()) {
+            throw new NoSuchElementException("Users list is empty");
+        }
+        return list;
     }
 }

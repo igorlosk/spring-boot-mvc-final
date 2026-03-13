@@ -1,11 +1,14 @@
 package dev.loskutnikov.springbootmvcfinal.controller;
 
 import dev.loskutnikov.springbootmvcfinal.dto.UserDto;
+import dev.loskutnikov.springbootmvcfinal.model.User;
 import dev.loskutnikov.springbootmvcfinal.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/users")
@@ -42,6 +45,12 @@ public class UserController {
         return ResponseEntity
                 .status(HttpStatus.NO_CONTENT)
                 .build();
+    }
+
+    @GetMapping
+    public ResponseEntity<List<User>> findAllUsers() {
+        List<User> userDtoList = userService.getAllUsers();
+        return ResponseEntity.ok(userDtoList);
     }
 
 }

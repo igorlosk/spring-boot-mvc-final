@@ -7,9 +7,7 @@ import dev.loskutnikov.springbootmvcfinal.model.Pet;
 import dev.loskutnikov.springbootmvcfinal.model.User;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class PetService {
@@ -18,6 +16,7 @@ public class PetService {
     private final PetMapper petMapper;
     private final UserMapper userMapper;
     private final UserService userService;
+    private final HashMap<Long, Pet> petList;
 
 
     private Long idCounter;
@@ -26,21 +25,31 @@ public class PetService {
         this.petMapper = petMapper;
         this.userMapper = userMapper;
         this.userService = userService;
+        this.petList = new HashMap<>();
         this.idCounter = 0L;
 
     }
 
     public PetDto createPet(PetDto petDto, Long userId) {
-        UserDto userDto = userService.findById(userId);
+        userService.findById(userId);
         Long newId = ++idCounter;
-        Pet pet = petMapper.toEntity(petDto);
+        Pet pet = new Pet();
         pet.setId(newId);
         pet.setName(petDto.getName());
-        pet.setUserId(userDto.getId());
-        System.out.println(pet);
+        pet.setUserId(userId);
+        petList.put(newId, pet);
         userService.addPetToUser(userId, pet);
         return petMapper.toDto(pet);
 
     }
 
+    public void deletePet(Long id) {
+        if (!petList.containsKey(id)) {
+            throw new NoSuchElementException("Pet not found by id=%s".formatted(id));
+        }
+        Pet pet = petList.get(id);
+        Long userId = pet.getUserId();
+        userService.deletePetFromUser(userId, pet);
+        petList.remove(id);
+    }
 }

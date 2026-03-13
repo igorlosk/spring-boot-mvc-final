@@ -1,9 +1,9 @@
 package dev.loskutnikov.springbootmvcfinal.controller;
 
 import dev.loskutnikov.springbootmvcfinal.dto.UserDto;
-import dev.loskutnikov.springbootmvcfinal.model.User;
 import dev.loskutnikov.springbootmvcfinal.service.UserService;
 import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,6 +26,22 @@ public class UserController {
     @GetMapping("/{id}")
     public ResponseEntity<UserDto> findUserById(@PathVariable("id") Long userId) {
         return ResponseEntity.ok(userService.findById(userId));
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<UserDto> updateUser(
+            @PathVariable("id") Long userId,
+            @RequestBody @Valid UserDto userDto) {
+        var updateUser = userService.updateUser(userDto, userId);
+        return ResponseEntity.ok(updateUser);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteUser(@PathVariable("id") Long userId) {
+        userService.deleteUser(userId);
+        return ResponseEntity
+                .status(HttpStatus.NO_CONTENT)
+                .build();
     }
 
 }

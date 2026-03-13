@@ -41,12 +41,4 @@ public class Pet {
         this.userId = userId;
     }
 
-    @Override
-    public String toString() {
-        return "Pet{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", userId=" + userId +
-                '}';
-    }
 }

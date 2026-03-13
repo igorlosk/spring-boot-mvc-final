@@ -1,7 +1,6 @@
 package dev.loskutnikov.springbootmvcfinal.controller;
 
 import dev.loskutnikov.springbootmvcfinal.dto.PetDto;
-import dev.loskutnikov.springbootmvcfinal.dto.UserDto;
 import dev.loskutnikov.springbootmvcfinal.service.PetService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;

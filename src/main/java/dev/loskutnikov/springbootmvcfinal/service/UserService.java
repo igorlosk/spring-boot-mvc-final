@@ -3,6 +3,7 @@ package dev.loskutnikov.springbootmvcfinal.service;
 import dev.loskutnikov.springbootmvcfinal.dto.UserDto;
 import dev.loskutnikov.springbootmvcfinal.model.Pet;
 import dev.loskutnikov.springbootmvcfinal.model.User;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -48,5 +49,20 @@ public class UserService {
     public void addPetToUser(Long userId, Pet pet) {
         List<Pet> pets = userList.get(userId).getPets();
         pets.add(pet);
+    }
+
+    public UserDto updateUser(UserDto userDto, Long userId) {
+        UserDto updatedUser = userMapper.toDto(userList.get(userId));
+        updatedUser.setName(userDto.getName());
+        updatedUser.setEmail(userDto.getEmail());
+        updatedUser.setAge(userDto.getAge());
+        userList.put(userId, userMapper.toEntity(updatedUser));
+        return updatedUser;
+    }
+
+    public void deleteUser(Long userId) {
+        UserDto deletedUser = userMapper.toDto(userList.get(userId));
+        userList.remove(userId);
+
     }
 }

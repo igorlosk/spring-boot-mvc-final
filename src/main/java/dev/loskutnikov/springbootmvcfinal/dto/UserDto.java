@@ -25,20 +25,20 @@ public class UserDto {
         this.pets = new ArrayList<>();
     }
 
-//    public UserDto(Long id, String name, String email, Integer age, List<PetDto> pets) {
-//        this.id = id;
-//        this.name = name;
-//        this.email = email;
-//        this.age = age;
-//        this.pets = pets != null ? new ArrayList<>(pets) : new ArrayList<>();
-//    }
+    public UserDto(Long id, String name, String email, Integer age, List<PetDto> pets) {
+        this.id = id;
+        this.name = name;
+        this.email = email;
+        this.age = age;
+        this.pets = pets != null ? new ArrayList<>(pets) : new ArrayList<>();
+    }
 
-//    public void addPet(PetDto petDto){
-//        if (petDto == null) {
-//            throw new IllegalArgumentException("Нельзя добавить null-питомца");
-//        }
-//        pets.add(petDto);
-//    }
+    public void addPet(PetDto petDto) {
+        if (petDto == null) {
+            throw new IllegalArgumentException("Нельзя добавить null-питомца");
+        }
+        pets.add(petDto);
+    }
 
     public Long getId() {
         return id;

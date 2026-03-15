@@ -33,35 +33,43 @@ class UserControllerTest {
 
     @Test
     void shouldSuccessCreateUser() throws Exception {
-        var newUserDto = new UserDto();
-        newUserDto.setId(1L);
-        newUserDto.setEmail("email@email.com");
-        newUserDto.setName("name");
-        newUserDto.setAge(30);
-        newUserDto.setPets(List.copyOf(new ArrayList<PetDto>()));
+        var user = new UserDto(
+                1L,
+                "some_name",
+                "email@gmail.com",
+                30,
+                List.of()
+        );
 
-        String userJson = objectMapper.writeValueAsString(newUserDto);
+        String userJson = objectMapper.writeValueAsString(user);
         String createdUserJson = mockMvc.perform(post("/api/users")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(userJson))
-                .andExpect(status().is(201))
+                .andExpect(status().isOk())
                 .andReturn()
                 .getResponse()
                 .getContentAsString();
 
         UserDto userDtoResponse = objectMapper.readValue(createdUserJson, UserDto.class);
+
         Assertions.assertNotNull(userDtoResponse.getId());
-        Assertions.assertEquals(newUserDto.getName(), userDtoResponse.getName());
+        Assertions.assertEquals(user.getName(), userDtoResponse.getName());
+        Assertions.assertEquals(user.getEmail(), userDtoResponse.getEmail());
+        Assertions.assertEquals(user.getAge(), userDtoResponse.getAge());
+
+        Assertions.assertDoesNotThrow(() -> userService.findUserById(userDtoResponse.getId()));
+
     }
 
     @Test
     void shouldSuccessSearchUserById() throws Exception {
-        var user = new UserDto();
-        user.setId(1L);
-        user.setEmail("email@email.com");
-        user.setName("name");
-        user.setAge(30);
-        user.setPets(List.copyOf(new ArrayList<PetDto>()));
+        var user = new UserDto(
+                1L,
+                "some_name",
+                "email@gmail.com",
+                30,
+                List.of()
+        );
 
         user = userService.createUser(user);
 
@@ -81,12 +89,13 @@ class UserControllerTest {
 
     @Test
     void updateUser_shouldReturnUpdatedUser() throws Exception {
-        var user = new UserDto();
-        user.setId(1L);
-        user.setEmail("update@email.com");
-        user.setName("updateName");
-        user.setAge(30);
-        user.setPets(List.copyOf(new ArrayList<PetDto>()));
+        var user = new UserDto(
+                1L,
+                "updateName",
+                "update@email.com",
+                30,
+                List.of()
+        );
 
         user = userService.createUser(user);
 
@@ -103,17 +112,18 @@ class UserControllerTest {
 
     @Test
     void deleteUser_shouldReturn204() throws Exception {
-        var newUserDto = new UserDto();
-        newUserDto.setId(1L);
-        newUserDto.setEmail("email@email.com");
-        newUserDto.setName("name");
-        newUserDto.setAge(30);
-        newUserDto.setPets(List.copyOf(new ArrayList<PetDto>()));
+        var user = new UserDto(
+                1L,
+                "some_name",
+                "email@gmail.com",
+                30,
+                List.of()
+        );
 
-        newUserDto = userService.createUser(newUserDto);
+        user = userService.createUser(user);
 
-        mockMvc.perform(delete("/api/users/{id}", newUserDto.getId())
-                .contentType(MediaType.APPLICATION_JSON))
+        mockMvc.perform(delete("/api/users/{id}", user.getId())
+                        .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().is(204));
 
     }

@@ -91,13 +91,30 @@ class UserControllerTest {
         user = userService.createUser(user);
 
         mockMvc.perform(put("/api/users/1")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(user)))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(user)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name").value("updateName"))
                 .andExpect(jsonPath("$.age").value(30))
                 .andExpect(jsonPath("$.email").value("update@email.com"));
 
+
+    }
+
+    @Test
+    void deleteUser_shouldReturn204() throws Exception {
+        var newUserDto = new UserDto();
+        newUserDto.setId(1L);
+        newUserDto.setEmail("email@email.com");
+        newUserDto.setName("name");
+        newUserDto.setAge(30);
+        newUserDto.setPets(List.copyOf(new ArrayList<PetDto>()));
+
+        newUserDto = userService.createUser(newUserDto);
+
+        mockMvc.perform(delete("/api/users/{id}", newUserDto.getId())
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().is(204));
 
     }
 }

@@ -56,4 +56,10 @@ public class UserService {
         return updatedUser;
     }
 
+    public void deleteUserById(Long id) {
+        User remove = userList.remove(id);
+        if (remove == null) {
+            throw new NoSuchElementException("Book not found by id=%s".formatted(id));
+        }
+    }
 }

@@ -12,4 +12,18 @@ import org.springframework.web.bind.annotation.*;
 public class PetController {
 
 
+    private final PetService petService;
+
+    public PetController(PetService petService) {
+        this.petService = petService;
+    }
+
+    @PostMapping("{id}")
+    public ResponseEntity<PetDto> createPet(
+            @Valid @RequestBody PetDto petDto,
+            @PathVariable("id") Long userId) {
+        var petDtoCreate = petService.createPet(petDto, userId);
+        return ResponseEntity.ok(petDtoCreate);
+    }
+
 }

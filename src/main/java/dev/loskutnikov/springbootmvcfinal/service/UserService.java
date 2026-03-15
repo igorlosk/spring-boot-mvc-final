@@ -1,6 +1,8 @@
 package dev.loskutnikov.springbootmvcfinal.service;
 
+import dev.loskutnikov.springbootmvcfinal.dto.PetDto;
 import dev.loskutnikov.springbootmvcfinal.dto.UserDto;
+import dev.loskutnikov.springbootmvcfinal.model.Pet;
 import dev.loskutnikov.springbootmvcfinal.model.User;
 import org.springframework.stereotype.Service;
 
@@ -37,13 +39,13 @@ public class UserService {
 
     public UserDto findUserById(Long id) {
         User user = Optional.ofNullable(userList.get(id))
-                .orElseThrow(() -> new NoSuchElementException("Book not found by id=%s".formatted(id)));
+                .orElseThrow(() -> new NoSuchElementException("User not found by id=%s".formatted(id)));
         return userMapper.toDto(user);
     }
 
     public UserDto updateUserById(Long id, UserDto userDto) {
         if (userList.get(id) == null) {
-            throw new NoSuchElementException("Book not found by id=%s".formatted(id));
+            throw new NoSuchElementException("User not found by id=%s".formatted(id));
         }
         var updatedUser = new UserDto(
                 id,
@@ -59,7 +61,13 @@ public class UserService {
     public void deleteUserById(Long id) {
         User remove = userList.remove(id);
         if (remove == null) {
-            throw new NoSuchElementException("Book not found by id=%s".formatted(id));
+            throw new NoSuchElementException("User not found by id=%s".formatted(id));
         }
+    }
+
+    public void addPetToUser(Long id, Pet pet) {
+        User user = Optional.ofNullable(userList.get(id))
+                .orElseThrow(() -> new NoSuchElementException("User not found by id=%s".formatted(id)));
+        user.addPet(pet);
     }
 }

@@ -15,7 +15,7 @@ public class UserDto {
     private String email;
 
     @NotNull
-    @Positive
+    @Min(5)
     @Max(120)
     private Integer age;
 

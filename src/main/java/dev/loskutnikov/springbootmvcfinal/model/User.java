@@ -9,10 +9,15 @@ public class User {
 
     private Long id;
 
+    @NotBlank
     private String name;
 
+    @Email
     private String email;
 
+    @NotNull
+    @Min(5)
+    @Max(120)
     private Integer age;
 
     private List<Pet> pets;

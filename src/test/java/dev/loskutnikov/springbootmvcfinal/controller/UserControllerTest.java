@@ -1,6 +1,5 @@
 package dev.loskutnikov.springbootmvcfinal.controller;
 
-import dev.loskutnikov.springbootmvcfinal.dto.PetDto;
 import dev.loskutnikov.springbootmvcfinal.dto.UserDto;
 import dev.loskutnikov.springbootmvcfinal.service.UserService;
 import org.junit.jupiter.api.Assertions;
@@ -12,7 +11,6 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import tools.jackson.databind.ObjectMapper;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -45,7 +43,7 @@ class UserControllerTest {
         String createdUserJson = mockMvc.perform(post("/api/users")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(userJson))
-                .andExpect(status().isOk())
+                .andExpect(status().isCreated())
                 .andReturn()
                 .getResponse()
                 .getContentAsString();
@@ -124,7 +122,7 @@ class UserControllerTest {
 
         mockMvc.perform(delete("/api/users/{id}", user.getId())
                         .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().is(204));
+                .andExpect(status().isNoContent());
 
     }
 }

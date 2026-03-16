@@ -1,9 +1,12 @@
 package dev.loskutnikov.springbootmvcfinal.model;
 
+import jakarta.validation.constraints.NotBlank;
+
 public class Pet {
 
     private Long id;
 
+    @NotBlank
     private String name;
 
     private Long userId;

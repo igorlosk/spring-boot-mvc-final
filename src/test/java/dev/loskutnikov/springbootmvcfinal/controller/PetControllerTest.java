@@ -3,8 +3,6 @@ package dev.loskutnikov.springbootmvcfinal.controller;
 
 import dev.loskutnikov.springbootmvcfinal.dto.PetDto;
 import dev.loskutnikov.springbootmvcfinal.dto.UserDto;
-import dev.loskutnikov.springbootmvcfinal.model.Pet;
-import dev.loskutnikov.springbootmvcfinal.model.User;
 import dev.loskutnikov.springbootmvcfinal.service.PetService;
 import dev.loskutnikov.springbootmvcfinal.service.UserService;
 import org.junit.jupiter.api.Assertions;
@@ -16,11 +14,9 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import tools.jackson.databind.ObjectMapper;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @AutoConfigureMockMvc
@@ -51,7 +47,7 @@ class PetControllerTest {
         var jsonResponse = mockMvc.perform(post("/api/users/pets/1")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(newPetJson))
-                .andExpect(status().isOk())
+                .andExpect(status().isCreated())
                 .andReturn().getResponse().getContentAsString();
         var petDtoResponse = objectMapper.readValue(jsonResponse, PetDto.class);
         Assertions.assertEquals(petDto.getName(), petDtoResponse.getName());
@@ -63,8 +59,38 @@ class PetControllerTest {
         var userWithPetDto = userService.findUserById(user.getId());
         Assertions.assertEquals(1, userWithPetDto.getPets().size());
         Assertions.assertEquals(petDtoResponse.getId(), userWithPetDto.getPets().get(0).getId());
+    }
 
+    @Test
+    void shouldDeletePetById() throws Exception {
 
+        var user = userService.createUser(new UserDto(
+                null,
+                "email@email.com",
+                "name",
+                30,
+                List.of()
+        ));
+
+        var petDto = new PetDto(null, "Vasya", user.getId());
+        String petJson = objectMapper.writeValueAsString(petDto);
+
+        var result = mockMvc.perform(post("/api/users/pets/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(petJson))
+                .andExpect(status().isCreated())
+                .andReturn();
+
+        String responseBody = result.getResponse().getContentAsString();
+        PetDto createdPet = objectMapper.readValue(responseBody, PetDto.class);
+        Long petId = createdPet.getId();
+
+        mockMvc.perform(delete("/api/users/pets/{id}", petId)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNoContent());
+
+        mockMvc.perform(get("/api/users/pets/{id}", petId))
+                .andExpect(status().isNotFound());
     }
 }
 

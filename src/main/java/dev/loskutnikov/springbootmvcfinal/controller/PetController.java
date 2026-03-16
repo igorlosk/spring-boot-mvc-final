@@ -20,10 +20,28 @@ public class PetController {
 
     @PostMapping("{id}")
     public ResponseEntity<PetDto> createPet(
-            @Valid @RequestBody PetDto petDto,
+            @RequestBody @Valid PetDto petDto,
             @PathVariable("id") Long userId) {
         var petDtoCreate = petService.createPet(petDto, userId);
-        return ResponseEntity.ok(petDtoCreate);
+        return ResponseEntity.status(HttpStatus.CREATED).body(petDtoCreate);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<PetDto> updatePet(
+            @RequestBody @Valid PetDto petDto,
+            @PathVariable("id") Long petId) {
+        return ResponseEntity.ok(petService.updatePet(petId, petDto));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<PetDto> deletePet(@PathVariable("id") Long petId) {
+        petService.deletePetById(petId);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<PetDto> getPetById(@PathVariable("id") Long petId) {
+        return ResponseEntity.ok(petService.getPetDto(petId));
     }
 
 }

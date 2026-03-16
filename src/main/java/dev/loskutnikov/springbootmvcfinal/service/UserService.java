@@ -1,6 +1,5 @@
 package dev.loskutnikov.springbootmvcfinal.service;
 
-import dev.loskutnikov.springbootmvcfinal.dto.PetDto;
 import dev.loskutnikov.springbootmvcfinal.dto.UserDto;
 import dev.loskutnikov.springbootmvcfinal.model.Pet;
 import dev.loskutnikov.springbootmvcfinal.model.User;
@@ -69,5 +68,24 @@ public class UserService {
         User user = Optional.ofNullable(userList.get(id))
                 .orElseThrow(() -> new NoSuchElementException("User not found by id=%s".formatted(id)));
         user.addPet(pet);
+    }
+
+    public void updatePet(Pet pet) {
+        User user = Optional.ofNullable(userList.get(pet.getUserId()))
+                .orElseThrow(() -> new NoSuchElementException("User not found by id=%s".formatted(pet.getUserId())));
+        List<Pet> pets = user.getPets();
+        Pet petToUpdate = pets.stream().filter(p -> p.getId().equals(pet.getId()))
+                .findFirst()
+                .get();
+        petToUpdate.setName(pet.getName());
+        user.setPets(pets);
+    }
+
+    public void deletePet(Pet pet) {
+        User user = Optional.ofNullable(userList.get(pet.getUserId()))
+                .orElseThrow(() -> new NoSuchElementException("User not found by id=%s".formatted(pet.getUserId())));
+        List<Pet> pets = user.getPets();
+        pets.removeIf(p -> p.getId().equals(pet.getId()));
+
     }
 }

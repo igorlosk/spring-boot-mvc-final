@@ -1,0 +1,83 @@
+package dev.loskutnikov.springbootmvcfinal.model;
+
+import jakarta.validation.constraints.*;
+
+import java.util.*;
+
+public class User {
+
+    private Long id;
+
+    @NotBlank
+    private String name;
+
+    @Email
+    private String email;
+
+    @NotNull
+    @Min(5)
+    @Max(120)
+    private Integer age;
+
+    private List<Pet> pets;
+
+    public User() {
+        this.pets = new ArrayList<>();
+    }
+
+    public User(Long id, String name, String email, Integer age, List<Pet> pets) {
+        this.id = id;
+        this.name = name;
+        this.email = email;
+        this.age = age;
+        this.pets = pets != null ? new ArrayList<>(pets) : new ArrayList<>();
+    }
+
+    public void addPet(Pet pet){
+        if (pet == null) {
+            throw new IllegalArgumentException("Нельзя добавить null-питомца");
+        }
+        pets.add(pet);
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public Integer getAge() {
+        return age;
+    }
+
+    public void setAge(Integer age) {
+        this.age = age;
+    }
+
+    public List<Pet> getPets() {
+        return pets;
+    }
+
+    public void setPets(List<Pet> pets) {
+        this.pets = pets;
+    }
+
+}

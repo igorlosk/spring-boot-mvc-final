@@ -1,7 +1,6 @@
 package dev.loskutnikov.springbootmvcfinal.service;
 
 import dev.loskutnikov.springbootmvcfinal.dto.PetDto;
-
 import dev.loskutnikov.springbootmvcfinal.model.Pet;
 import org.springframework.stereotype.Service;
 
@@ -25,14 +24,14 @@ public class PetService {
         this.idCounter = 0L;
     }
 
-    public PetDto createPet(PetDto petDto, Long userId) {
+    public PetDto createPet(PetDto petDto) {
         Long petId = ++idCounter;
         PetDto createdPet = new PetDto(
                 petId,
                 petDto.getName(),
-                userId
+                petDto.getUserId()
         );
-        userService.addPetToUser(userId, petMapper.toEntity(createdPet));
+        userService.addPetToUser(createdPet.getUserId(), petMapper.toEntity(createdPet));
         petList.put(petId, petMapper.toEntity(createdPet));
         return createdPet;
 

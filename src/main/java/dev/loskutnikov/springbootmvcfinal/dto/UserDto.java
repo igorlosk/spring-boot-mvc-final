@@ -2,8 +2,7 @@ package dev.loskutnikov.springbootmvcfinal.dto;
 
 import jakarta.validation.constraints.*;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class UserDto {
     private Long id;

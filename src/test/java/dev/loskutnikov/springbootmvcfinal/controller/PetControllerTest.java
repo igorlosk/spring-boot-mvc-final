@@ -1,12 +1,9 @@
 package dev.loskutnikov.springbootmvcfinal.controller;
 
 
-import dev.loskutnikov.springbootmvcfinal.dto.PetDto;
-import dev.loskutnikov.springbootmvcfinal.dto.UserDto;
-import dev.loskutnikov.springbootmvcfinal.service.PetService;
-import dev.loskutnikov.springbootmvcfinal.service.UserService;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
+import dev.loskutnikov.springbootmvcfinal.dto.*;
+import dev.loskutnikov.springbootmvcfinal.service.*;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;

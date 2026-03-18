@@ -1,12 +1,9 @@
 package dev.loskutnikov.springbootmvcfinal.exceptions;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.slf4j.*;
+import org.springframework.http.*;
 import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.annotation.ControllerAdvice;
-import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.NoSuchElementException;
@@ -19,7 +16,7 @@ public class GlobExceptionHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ServerErrorDto> handleValidationException(MethodArgumentNotValidException e) {
-        log.error("Got validation exception" + e);
+        log.error("Got validation exception", e);
 
         String detailedMessage = e.getBindingResult()
                 .getFieldErrors()
@@ -37,7 +34,7 @@ public class GlobExceptionHandler {
 
     @ExceptionHandler()
     public ResponseEntity<ServerErrorDto> handleGenericException(Exception e) {
-        log.error("Server error" + e);
+        log.error("Server error", e);
         var newDto = new ServerErrorDto(
                 "Server error",
                 e.getMessage(),
@@ -49,7 +46,7 @@ public class GlobExceptionHandler {
 
     @ExceptionHandler(NoSuchElementException.class)
     public ResponseEntity<ServerErrorDto> handleNotFoundException(NoSuchElementException e) {
-        log.error("Got exception" + e);
+        log.error("Got exception", e);
         var newDto = new ServerErrorDto(
                 "Сущность не найдена",
                 e.getMessage(),

@@ -1,9 +1,7 @@
 package dev.loskutnikov.springbootmvcfinal.service;
 
-import dev.loskutnikov.springbootmvcfinal.dto.PetDto;
-import dev.loskutnikov.springbootmvcfinal.dto.UserDto;
-import dev.loskutnikov.springbootmvcfinal.model.Pet;
-import dev.loskutnikov.springbootmvcfinal.model.User;
+import dev.loskutnikov.springbootmvcfinal.dto.*;
+import dev.loskutnikov.springbootmvcfinal.model.*;
 import org.springframework.stereotype.Component;
 
 import java.util.List;

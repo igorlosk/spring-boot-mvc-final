@@ -3,8 +3,7 @@ package dev.loskutnikov.springbootmvcfinal.controller;
 import dev.loskutnikov.springbootmvcfinal.dto.UserDto;
 import dev.loskutnikov.springbootmvcfinal.service.UserService;
 import jakarta.validation.Valid;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -20,7 +19,10 @@ public class UserController {
     @PostMapping
     public ResponseEntity<UserDto> createUser(@RequestBody @Valid UserDto userDto) {
         var createdUser = userService.createUser(userDto);
-        return ResponseEntity.status(HttpStatus.CREATED).body(createdUser);
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .header("Location", String.format("/api/users/%d", createdUser.getId()))
+                .body(createdUser);
     }
 
     @GetMapping("/{id}")

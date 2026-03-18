@@ -3,14 +3,12 @@ package dev.loskutnikov.springbootmvcfinal.controller;
 import dev.loskutnikov.springbootmvcfinal.dto.PetDto;
 import dev.loskutnikov.springbootmvcfinal.service.PetService;
 import jakarta.validation.Valid;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/users/pets")
+@RequestMapping("/api/pets")
 public class PetController {
-
 
     private final PetService petService;
 
@@ -18,12 +16,13 @@ public class PetController {
         this.petService = petService;
     }
 
-    @PostMapping("{id}")
-    public ResponseEntity<PetDto> createPet(
-            @RequestBody @Valid PetDto petDto,
-            @PathVariable("id") Long userId) {
-        var petDtoCreate = petService.createPet(petDto, userId);
-        return ResponseEntity.status(HttpStatus.CREATED).body(petDtoCreate);
+    @PostMapping()
+    public ResponseEntity<PetDto> createPet(@RequestBody @Valid PetDto petDto) {
+        var petDtoCreate = petService.createPet(petDto);
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .header("Location", String.format("/api/pets/%d", petDtoCreate.getId()))
+                .body(petDtoCreate);
     }
 
     @PutMapping("/{id}")
